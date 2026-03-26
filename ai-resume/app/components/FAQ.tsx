@@ -32,19 +32,39 @@ export default function FAQ() {
 
         <div className="space-y-4">
           {faqs.map((item, index) => (
-            <motion.details
-              key={index}
-              className="card-hover glass p-4 cursor-pointer"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15 }}
-            >
-              <summary className="font-medium text-cyan-400">
-                {item.q}
-              </summary>
-              <p className="mt-2 text-gray-400">{item.a}</p>
-            </motion.details>
-          ))}
+  <motion.div
+    key={index}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.15 }}
+  >
+
+    <div className="border-animate rounded-xl">
+      <details className="glass glow p-5 rounded-xl group cursor-pointer">
+
+        {/* Question */}
+        <summary className="flex justify-between items-center font-medium text-cyan-400 list-none">
+          {item.q}
+
+          <span className="transition-transform duration-300 group-open:rotate-180">
+            ⌄
+          </span>
+        </summary>
+
+        {/* Answer */}
+        <motion.p
+          className="mt-3 text-gray-400"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+        >
+          {item.a}
+        </motion.p>
+
+      </details>
+    </div>
+
+  </motion.div>
+))}
         </div>
 
       </div>

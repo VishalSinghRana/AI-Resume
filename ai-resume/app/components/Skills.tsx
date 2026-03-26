@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Tilt from "react-parallax-tilt";
 
 const skills = [
   { name: "Product Management", level: 95 },
@@ -20,25 +21,40 @@ export default function Skills() {
 
         <div className="space-y-6">
           {skills.map((skill, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15 }}
-            >
-              <div className="flex justify-between mb-1">
-                <span>{skill.name}</span>
-                <span className="text-cyan-400">{skill.level}%</span>
-              </div>
+  <motion.div
+    key={index}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.15 }}
+  >
+    <Tilt scale={1.02}>
+    <div className="border-animate rounded-xl">
+      <div className="glass glow p-4 rounded-xl">
 
-              <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  className="h-2 bg-gradient-to-r from-cyan-400 to-purple-500"
-                  style={{ width: `${skill.level}%` }}
-                ></div>
-              </div>
-            </motion.div>
-          ))}
+        {/* Header */}
+        <div className="flex justify-between mb-2">
+          <span className="font-medium">{skill.name}</span>
+          <span className="text-cyan-400">{skill.level}%</span>
+        </div>
+
+        {/* Bar */}
+        <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+          
+          <motion.div
+            className="h-3 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 shadow-[0_0_15px_rgba(0,255,255,0.6)]"
+            initial={{ width: 0 }}
+            whileInView={{ width: `${skill.level}%` }}
+            transition={{ duration: 1.2, delay: index * 0.2 }}
+          />
+
+        </div>
+
+      </div>
+    </div>
+    </Tilt>
+
+  </motion.div>
+))}
         </div>
 
       </div>

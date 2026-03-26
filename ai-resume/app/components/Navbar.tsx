@@ -2,29 +2,35 @@
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-6xl mx-auto px-6 py-3 flex justify-center gap-8 text-sm">
+    <nav className="fixed top-0 left-0 w-full z-50 flex justify-center mt-6">
+      
+      {/* OUTER BIG PILL */}
+      <div className="px-6 py-3 rounded-full bg-white/60 backdrop-blur-md border border-white/20 shadow-lg">
 
-        <a href="#hero" className="hover:text-cyan-400 transition">
-          Home
-        </a>
+        {/* INNER ITEMS */}
+        <div className="flex items-center gap-4 text-lg font-medium">
 
-        <a href="#metrics" className="hover:text-cyan-400 transition">
-          Impact
-        </a>
+          <a href="#hero" className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-cyan-400 hover:text-black text-gray-300 transition">
+            Home
+          </a>
 
-        <a href="#timeline" className="hover:text-cyan-400 transition">
-          Experience
-        </a>
+          <a href="#metrics" className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-cyan-400 hover:text-black text-gray-300 transition">
+            Impact
+          </a>
 
-        <a href="#skills" className="hover:text-cyan-400 transition">
-          Skills
-        </a>
+          <a href="#timeline" className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-cyan-400 hover:text-black text-gray-300 transition">
+            Experience
+          </a>
 
-        <a href="#faq" className="hover:text-cyan-400 transition">
-          FAQ
-        </a>
+          <a href="#skills" className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-cyan-400 hover:text-black text-gray-300 transition">
+            Skills
+          </a>
 
+          <a href="#faq" className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-cyan-400 hover:text-black text-gray-300 transition">
+            FAQ
+          </a>
+
+        </div>
       </div>
     </nav>
   );

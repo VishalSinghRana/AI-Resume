@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 body {
-  background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+  background: linear-gradient(-45deg, #020617, #0f172a, #020617, #1e293b);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
   color: white;
+}
+
+@keyframes gradientBG {
+  0% {background-position: 0% 50%}
+  50% {background-position: 100% 50%}
+  100% {background-position: 0% 50%}
 }
 
 /* Animated gradient layer */
@@ -57,4 +65,57 @@ html {
 
 .glow:hover {
   box-shadow: 0 0 40px rgba(0,255,255,0.7);
+}
+
+.border-animate {
+  position: relative;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(270deg, #00f7ff, #8a2be2, #00f7ff);
+  background-size: 400% 400%;
+  animation: borderMove 6s ease infinite;
+}
+
+@keyframes borderMove {
+  0% {background-position: 0%}
+  50% {background-position: 100%}
+  100% {background-position: 0%}
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 60%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+details:hover {
+  transform: translateY(-4px);
+}
+
+nav a {
+  position: relative;
+  padding: 40px 60px 30px 30px;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: cyan;
+  transition: 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+nav a:hover {
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
 }
