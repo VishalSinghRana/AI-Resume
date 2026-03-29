@@ -1,406 +1,472 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
-interface Skill {
-  name: string;
-  tier: 1 | 2; // 2 = proficient, 1 = working knowledge
-}
-
-interface Module {
-  id: string;
-  icon: string;
-  label: string;
-  color: string;
-  rgb: string;
-  desc: string;
-  skills: Skill[];
-}
-
-const MODULES: Module[] = [
+const CATS = [
   {
-    id: "pm",
-    icon: "🧭",
     label: "PRODUCT",
     color: "#00f7ff",
     rgb: "0,247,255",
-    desc: "CORE PM · STRATEGY · EXECUTION · DELIVERY",
     skills: [
-      { name: "Product Roadmapping",        tier: 2 },
-      { name: "PRD Writing",                tier: 2 },
-      { name: "Feature Prioritization",     tier: 2 },
-      { name: "User Story Mapping",         tier: 2 },
-      { name: "Backlog Refinement",         tier: 2 },
-      { name: "Acceptance Criteria",        tier: 2 },
-      { name: "Go-To-Market",               tier: 1 },
-      { name: "Market Research",            tier: 1 },
-      { name: "Product Lifecycle Mgmt",     tier: 2 },
-      { name: "Problem Framing",            tier: 2 },
-      { name: "Risk Management",            tier: 1 },
-      { name: "Sprint Planning",            tier: 2 },
-      { name: "Stakeholder Alignment",      tier: 2 },
-      { name: "Cross-Functional Leadership",tier: 2 },
-      { name: "Training & Adoption",        tier: 2 },
+      "Roadmapping", "PRD Writing", "Prioritization", "User Stories",
+      "Backlog Refinement", "Sprint Planning", "Risk Management",
+      "Stakeholder Mgmt", "Training & Adoption", "Go-To-Market",
     ],
   },
   {
-    id: "analytics",
-    icon: "📊",
     label: "ANALYTICS",
     color: "#a855f7",
     rgb: "168,85,247",
-    desc: "DATA · EXPERIMENTATION · METRICS · INSIGHTS",
     skills: [
-      { name: "A/B Testing",             tier: 2 },
-      { name: "Funnel Analysis",         tier: 2 },
-      { name: "Cohort Analysis",         tier: 1 },
-      { name: "North Star Metrics",      tier: 2 },
-      { name: "OKR Frameworks",          tier: 2 },
-      { name: "SQL (Analytics)",         tier: 2 },
-      { name: "Hypothesis Testing",      tier: 1 },
-      { name: "Experiment Design",       tier: 1 },
-      { name: "Data-Driven Decisions",   tier: 2 },
-      { name: "Support Data Analysis",   tier: 2 },
-      { name: "KPI Definition",          tier: 2 },
+      "A/B Testing", "Funnel Analysis", "OKR Frameworks", "North Star Metrics",
+      "SQL Analytics", "Cohort Analysis", "Hypothesis Testing", "KPI Definition",
     ],
   },
   {
-    id: "design",
-    icon: "✦",
     label: "DESIGN",
     color: "#ec4899",
     rgb: "236,72,153",
-    desc: "UX · PROTOTYPING · INFORMATION ARCHITECTURE",
     skills: [
-      { name: "Figma",                    tier: 2 },
-      { name: "FigJam",                   tier: 2 },
-      { name: "Eraser.io",                tier: 1 },
-      { name: "User Journey Mapping",     tier: 2 },
-      { name: "Information Architecture", tier: 2 },
-      { name: "Wireframing",              tier: 1 },
-      { name: "Prototyping",              tier: 1 },
-      { name: "Usability Analysis",       tier: 2 },
-      { name: "Service Design",           tier: 1 },
-      { name: "Task Flow Design",         tier: 2 },
+      "Figma", "FigJam", "User Journey Mapping", "IA Design",
+      "Wireframing", "Task Flow Design", "Usability Analysis", "Eraser.io",
     ],
   },
   {
-    id: "tech",
-    icon: "⚡",
     label: "TECHNICAL",
     color: "#facc15",
     rgb: "250,204,21",
-    desc: "ENGINEERING · AI/ML · FULL STACK · INFRASTRUCTURE",
     skills: [
-      { name: "Python",                  tier: 2 },
-      { name: "Java",                    tier: 2 },
-      { name: "SQL",                     tier: 2 },
-      { name: "Apache Wicket",           tier: 2 },
-      { name: "HTML / CSS",              tier: 2 },
-      { name: "Git · GitHub · GitLab",   tier: 2 },
-      { name: "Machine Learning",        tier: 1 },
-      { name: "Deep Learning",           tier: 1 },
-      { name: "Computer Vision",         tier: 1 },
-      { name: "PostgreSQL",              tier: 2 },
-      { name: "REST APIs",               tier: 1 },
-      { name: "Full SDLC",               tier: 2 },
-      { name: "LLMs · RAG · Agents",     tier: 1 },
-      { name: "Prompt Engineering",      tier: 1 },
+      "Python", "Java", "SQL", "PostgreSQL", "Git / GitHub",
+      "HTML · CSS", "Machine Learning", "Deep Learning", "LLMs · RAG", "Full SDLC",
     ],
   },
   {
-    id: "soft",
-    icon: "◈",
     label: "SOFT SKILLS",
     color: "#38bdf8",
     rgb: "56,189,248",
-    desc: "LEADERSHIP · COMMUNICATION · MINDSET",
     skills: [
-      { name: "Strategic Thinking",  tier: 2 },
-      { name: "Communication",       tier: 2 },
-      { name: "Leadership",          tier: 2 },
-      { name: "Empathy",             tier: 2 },
-      { name: "Decision-Making",     tier: 2 },
-      { name: "Adaptability",        tier: 2 },
-      { name: "Time Management",     tier: 2 },
-      { name: "Problem-Solving",     tier: 2 },
-      { name: "Negotiation",         tier: 1 },
-      { name: "Conflict Resolution", tier: 1 },
-      { name: "Mentoring",           tier: 2 },
-      { name: "Presentation",        tier: 2 },
+      "Leadership", "Strategic Thinking", "Communication", "Empathy",
+      "Decision-Making", "Adaptability", "Mentoring", "Problem-Solving",
     ],
   },
 ];
 
+/* Branch label config: angle from vertical, text anchor, pixel offset from node */
+const BRANCH_CONFIGS = [
+  { deg: -76, labelAnchor: "end"    as CanvasTextAlign, ldx: -16, ldy:   0 },
+  { deg: -38, labelAnchor: "end"    as CanvasTextAlign, ldx: -14, ldy: -12 },
+  { deg:   0, labelAnchor: "center" as CanvasTextAlign, ldx:   0, ldy: -18 },
+  { deg:  38, labelAnchor: "start"  as CanvasTextAlign, ldx:  14, ldy: -12 },
+  { deg:  76, labelAnchor: "start"  as CanvasTextAlign, ldx:  16, ldy:   0 },
+];
+
 /* ─────────────────────────────────────────
-   SKILL NODE
+   TYPES
 ───────────────────────────────────────── */
-function SkillNode({ skill, color, rgb, index }: {
-  skill: Skill; color: string; rgb: string; index: number;
+interface BNode {
+  x: number; y: number;
+  angle: number;
+  cat: typeof CATS[0];
+  labelAnchor: CanvasTextAlign;
+  ldx: number; ldy: number;
+}
+
+/* ─────────────────────────────────────────
+   SKILL PANEL (pure DOM — zero overlap)
+───────────────────────────────────────── */
+function SkillPanel({ openIdx }: { openIdx: number }) {
+  if (openIdx < 0) {
+    return (
+      <div style={{
+        height: "100%", display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        gap: 12, opacity: 0.3,
+      }}>
+        <div style={{ fontSize: 28 }}>◈</div>
+        <div style={{
+          fontFamily: "'Share Tech Mono', monospace",
+          fontSize: 10, color: "rgba(0,247,255,0.6)",
+          letterSpacing: 2, textAlign: "center", lineHeight: 1.8,
+        }}>
+          SELECT A BRANCH<br />TO VIEW SKILLS
+        </div>
+      </div>
+    );
+  }
+
+  const cat = CATS[openIdx];
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={openIdx}
+        initial={{ opacity: 0, x: 16 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -8 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* Header */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 12,
+          marginBottom: 22, paddingBottom: 16,
+          borderBottom: "1px solid rgba(0,247,255,0.07)",
+        }}>
+          <div style={{
+            width: 10, height: 10, borderRadius: "50%", flexShrink: 0,
+            background: cat.color,
+            boxShadow: `0 0 10px ${cat.color}`,
+          }} />
+          <div style={{
+            fontFamily: "'Orbitron', sans-serif",
+            fontSize: 13, fontWeight: 700, letterSpacing: 2,
+            color: cat.color,
+            textShadow: `0 0 14px ${cat.color}60`,
+          }}>
+            {cat.label}
+          </div>
+          <div style={{
+            marginLeft: "auto",
+            fontFamily: "'Share Tech Mono', monospace",
+            fontSize: 9, color: "rgba(148,163,184,0.5)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            padding: "2px 8px", borderRadius: 999,
+          }}>
+            {cat.skills.length} SKILLS
+          </div>
+        </div>
+
+        {/* Skill chips */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+          {cat.skills.map((skill, i) => (
+            <SkillChip key={skill} skill={skill} cat={cat} index={i} />
+          ))}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function SkillChip({
+  skill, cat, index,
+}: {
+  skill: string;
+  cat: typeof CATS[0];
+  index: number;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const [hov, setHov] = useState(false);
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 8, scale: 0.92 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.04, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       style={{
-        display: "flex", alignItems: "center", gap: 8,
-        padding: "9px 14px", borderRadius: 10,
-        background: hovered ? `rgba(${rgb},0.07)` : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hovered ? `rgba(${rgb},0.35)` : "rgba(255,255,255,0.07)"}`,
-        transform: hovered ? "translateY(-3px)" : "translateY(0)",
-        boxShadow: hovered ? `0 0 18px rgba(${rgb},0.18), inset 0 0 8px rgba(${rgb},0.05)` : "none",
-        transition: "all 0.22s ease",
+        display: "flex", alignItems: "center", gap: 7,
+        padding: "9px 14px", borderRadius: 9,
+        border: `1px solid ${hov ? cat.color : `rgba(${cat.rgb},0.22)`}`,
+        background: hov ? `rgba(${cat.rgb},0.1)` : `rgba(${cat.rgb},0.05)`,
+        boxShadow: hov ? `0 0 14px rgba(${cat.rgb},0.2)` : "none",
+        transform: hov ? "translateY(-2px)" : "translateY(0)",
+        transition: "all 0.2s ease",
         cursor: "default",
       }}
     >
-      {/* Hex accent */}
+      {/* Hex diamond */}
       <div style={{
-        width: 7, height: 7, flexShrink: 0,
-        background: color,
+        width: 6, height: 6, flexShrink: 0,
+        background: cat.color,
         clipPath: "polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)",
-        opacity: hovered ? 1 : 0.5,
-        filter: hovered ? `drop-shadow(0 0 4px ${color})` : "none",
-        transition: "all 0.22s",
+        filter: hov ? `drop-shadow(0 0 4px ${cat.color})` : "none",
       }} />
-
-      {/* Name */}
       <span style={{
         fontFamily: "'Exo 2', sans-serif",
-        fontSize: 12, fontWeight: 400,
-        color: hovered ? color : "rgba(203,213,225,0.8)",
-        letterSpacing: 0.3,
+        fontSize: 13, fontWeight: 400,
+        color: hov ? cat.color : "rgba(203,213,225,0.85)",
         whiteSpace: "nowrap",
-        transition: "color 0.22s",
-        textShadow: hovered ? `0 0 12px rgba(${rgb},0.6)` : "none",
+        transition: "color 0.2s",
       }}>
-        {skill.name}
+        {skill}
       </span>
-
-      {/* Tier dots */}
-      <div style={{ display: "flex", gap: 3, marginLeft: 4, flexShrink: 0 }}>
-        {Array.from({ length: skill.tier }).map((_, i) => (
-          <div key={i} style={{
-            width: 5, height: 5, borderRadius: "50%",
-            background: color,
-            opacity: hovered ? 0.9 : 0.3,
-            boxShadow: hovered ? `0 0 5px ${color}` : "none",
-            transition: "all 0.22s",
-          }} />
-        ))}
-      </div>
     </motion.div>
   );
 }
 
 /* ─────────────────────────────────────────
-   TAB
+   CANVAS TREE
 ───────────────────────────────────────── */
-function Tab({ mod, active, onClick }: {
-  mod: Module; active: boolean; onClick: () => void;
+function SkillTree({
+  openIdx,
+  onBranchClick,
+}: {
+  openIdx: number;
+  onBranchClick: (i: number) => void;
 }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        flexShrink: 0,
-        display: "flex", alignItems: "center", gap: 7,
-        padding: "12px 18px",
-        cursor: "pointer",
-        background: active ? `rgba(${mod.rgb},0.04)` : "transparent",
-        borderTop: "none",
-        borderLeft: "none",
-        borderRight: "1px solid rgba(0,247,255,0.06)",
-        borderBottom: `2px solid ${active ? mod.color : "transparent"}`,
-        transition: "all 0.22s",
-        outline: "none",
-      }}
-    >
-      {/* Icon chip */}
-      <div style={{
-        width: 24, height: 24, borderRadius: 6, flexShrink: 0,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 12,
-        background: active ? `rgba(${mod.rgb},0.12)` : "rgba(255,255,255,0.04)",
-        border: `1px solid ${active ? `rgba(${mod.rgb},0.35)` : "rgba(255,255,255,0.08)"}`,
-        boxShadow: active ? `0 0 10px rgba(${mod.rgb},0.2)` : "none",
-        transition: "all 0.22s",
-      }}>
-        {mod.icon}
-      </div>
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const state     = useRef({
+    animT: 0,
+    openIdx: -1,
+    hoveredBranch: -1,
+    bnodes: [] as BNode[],
+    rafId: 0,
+    CW: 480,
+    CH: 520,
+  });
 
-      {/* Label */}
-      <span style={{
-        fontFamily: "'Orbitron', sans-serif",
-        fontSize: 8.5, fontWeight: 600, letterSpacing: 1.5,
-        color: active ? mod.color : "rgba(148,163,184,0.6)",
-        transition: "color 0.22s",
-        whiteSpace: "nowrap",
-      }}>
-        {mod.label}
-      </span>
+  /* Sync openIdx into ref so canvas loop sees it without re-registering */
+  useEffect(() => {
+    state.current.openIdx = openIdx;
+  }, [openIdx]);
 
-      {/* Count badge */}
-      <span style={{
-        fontFamily: "'Share Tech Mono', monospace",
-        fontSize: 7,
-        padding: "1px 5px", borderRadius: 999,
-        background: active ? `rgba(${mod.rgb},0.1)` : "rgba(255,255,255,0.05)",
-        color: active ? mod.color : "rgba(148,163,184,0.4)",
-        border: `1px solid ${active ? `rgba(${mod.rgb},0.3)` : "rgba(255,255,255,0.06)"}`,
-        transition: "all 0.22s",
-      }}>
-        {mod.skills.length}
-      </span>
-    </button>
-  );
-}
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-/* ─────────────────────────────────────────
-   PANEL
-───────────────────────────────────────── */
-function Panel({ mod }: { mod: Module }) {
-  return (
-    <motion.div
-      key={mod.id}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      style={{ padding: "28px 24px 24px" }}
-    >
-      {/* Panel header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
-        <div style={{
-          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 20,
-          background: `rgba(${mod.rgb},0.08)`,
-          border: `1px solid rgba(${mod.rgb},0.25)`,
-          boxShadow: `0 0 16px rgba(${mod.rgb},0.15)`,
-        }}>
-          {mod.icon}
-        </div>
-        <div>
-          <div style={{
-            fontFamily: "'Orbitron', sans-serif",
-            fontSize: 14, fontWeight: 700, letterSpacing: 2,
-            color: mod.color,
-            textShadow: `0 0 16px rgba(${mod.rgb},0.4)`,
-          }}>
-            {mod.label} MODULE
-          </div>
-          <div style={{
-            fontFamily: "'Share Tech Mono', monospace",
-            fontSize: 8, letterSpacing: 1.5,
-            color: "rgba(148,163,184,0.45)",
-            marginTop: 4,
-          }}>
-            {mod.desc}
-          </div>
-        </div>
-      </div>
+    const DPR = window.devicePixelRatio || 1;
+    const CW = 480, CH = 520;
+    state.current.CW = CW;
+    state.current.CH = CH;
 
-      {/* Skill nodes */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-        {mod.skills.map((skill, i) => (
-          <SkillNode key={skill.name} skill={skill} color={mod.color} rgb={mod.rgb} index={i} />
-        ))}
-      </div>
+    canvas.width  = CW * DPR;
+    canvas.height = CH * DPR;
+    canvas.style.width  = `${CW}px`;
+    canvas.style.height = `${CH}px`;
 
-      {/* Legend */}
-      <div style={{
-        marginTop: 24, paddingTop: 20,
-        borderTop: "1px solid rgba(0,247,255,0.07)",
-        display: "flex", gap: 20, flexWrap: "wrap",
-      }}>
-        {[
-          { dots: 2, label: "PROFICIENT" },
-          { dots: 1, label: "WORKING KNOWLEDGE" },
-        ].map(({ dots, label }) => (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: 7 }}>
-            <div style={{ display: "flex", gap: 3 }}>
-              {Array.from({ length: dots }).map((_, i) => (
-                <div key={i} style={{
-                  width: 5, height: 5, borderRadius: "50%",
-                  background: mod.color,
-                  boxShadow: `0 0 5px ${mod.color}`,
-                  opacity: 0.85,
-                }} />
-              ))}
-            </div>
-            <span style={{
-              fontFamily: "'Share Tech Mono', monospace",
-              fontSize: 8, letterSpacing: 1.5,
-              color: "rgba(148,163,184,0.4)",
-            }}>
-              {label}
-            </span>
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
+    const ctx = canvas.getContext("2d")!;
+    ctx.scale(DPR, DPR);
+
+    /* Geometry */
+    const ROOT      = { x: CW / 2, y: CH * 0.87 };
+    const TRUNK_TIP = { x: CW / 2, y: ROOT.y - CH * 0.36 };
+    const bLen      = CH * 0.23;
+
+    const bnodes: BNode[] = BRANCH_CONFIGS.map((cfg, i) => {
+      const rad = (cfg.deg - 90) * Math.PI / 180;
+      return {
+        x:           TRUNK_TIP.x + Math.cos(rad) * bLen,
+        y:           TRUNK_TIP.y + Math.sin(rad) * bLen,
+        angle:       rad,
+        cat:         CATS[i],
+        labelAnchor: cfg.labelAnchor,
+        ldx:         cfg.ldx,
+        ldy:         cfg.ldy,
+      };
+    });
+    state.current.bnodes = bnodes;
+
+    function hexRgb(h: string) {
+      return [
+        parseInt(h.slice(1, 3), 16),
+        parseInt(h.slice(3, 5), 16),
+        parseInt(h.slice(5, 7), 16),
+      ].join(",");
+    }
+
+    function draw() {
+      const s = state.current;
+      s.animT += 0.016;
+      ctx.clearRect(0, 0, CW, CH);
+
+      /* ── TRUNK ── */
+      ctx.save();
+      ctx.strokeStyle = "rgba(0,247,255,0.82)";
+      ctx.lineWidth   = 4.5;
+      ctx.lineCap     = "round";
+      ctx.shadowColor = "rgba(0,247,255,0.5)";
+      ctx.shadowBlur  = 22;
+      ctx.beginPath();
+      ctx.moveTo(ROOT.x, ROOT.y);
+      ctx.lineTo(TRUNK_TIP.x, TRUNK_TIP.y);
+      ctx.stroke();
+      ctx.restore();
+
+      /* Pulse travelling up trunk */
+      const pct = (s.animT * 0.45) % 1;
+      ctx.save();
+      ctx.shadowColor = "#00f7ff";
+      ctx.shadowBlur  = 18;
+      ctx.beginPath();
+      ctx.arc(
+        ROOT.x + (TRUNK_TIP.x - ROOT.x) * pct,
+        ROOT.y + (TRUNK_TIP.y - ROOT.y) * pct,
+        3.5, 0, Math.PI * 2,
+      );
+      ctx.fillStyle = "#00f7ff";
+      ctx.fill();
+      ctx.restore();
+
+      /* Trunk tip junction */
+      ctx.save();
+      ctx.shadowColor = "rgba(0,247,255,0.5)";
+      ctx.shadowBlur  = 14;
+      ctx.beginPath();
+      ctx.arc(TRUNK_TIP.x, TRUNK_TIP.y, 6, 0, Math.PI * 2);
+      ctx.fillStyle   = "rgba(0,247,255,0.2)";
+      ctx.strokeStyle = "rgba(0,247,255,0.6)";
+      ctx.lineWidth   = 1.5;
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      /* ── ROOT node ── */
+      const rp = 0.6 + Math.sin(s.animT * 2.2) * 0.4;
+      ctx.save();
+      ctx.shadowColor = "rgba(0,247,255,0.6)";
+      ctx.shadowBlur  = 24 * rp;
+      ctx.beginPath();
+      ctx.arc(ROOT.x, ROOT.y, 12, 0, Math.PI * 2);
+      ctx.fillStyle = "#00f7ff";
+      ctx.fill();
+      ctx.restore();
+
+      /* Name — below root dot */
+      ctx.save();
+      ctx.textAlign    = "center";
+      ctx.textBaseline = "top";
+      ctx.font         = `900 13px 'Orbitron', sans-serif`;
+      ctx.fillStyle    = "rgba(0,247,255,0.95)";
+      ctx.shadowColor  = "rgba(0,247,255,0.5)";
+      ctx.shadowBlur   = 14;
+      ctx.fillText("VISHAL SINGH RANA", ROOT.x, ROOT.y + 20);
+      ctx.font      = `300 9px 'Share Tech Mono', monospace`;
+      ctx.fillStyle = "rgba(0,247,255,0.4)";
+      ctx.shadowBlur = 0;
+      ctx.fillText("AI PRODUCT MANAGER", ROOT.x, ROOT.y + 37);
+      ctx.restore();
+
+      /* ── BRANCHES + NODES ── */
+      bnodes.forEach((bn, i) => {
+        const isOpen = i === s.openIdx;
+        const isHov  = i === s.hoveredBranch;
+
+        /* Branch line */
+        ctx.save();
+        ctx.strokeStyle = bn.cat.color;
+        ctx.lineWidth   = isOpen ? 2.8 : 2;
+        ctx.lineCap     = "round";
+        ctx.shadowColor = bn.cat.color;
+        ctx.shadowBlur  = isOpen ? 20 : 10;
+        ctx.beginPath();
+        ctx.moveTo(TRUNK_TIP.x, TRUNK_TIP.y);
+        ctx.lineTo(bn.x, bn.y);
+        ctx.stroke();
+        ctx.restore();
+
+        /* Node circle */
+        const r = isOpen || isHov ? 12 : 8;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(bn.x, bn.y, r, 0, Math.PI * 2);
+        ctx.fillStyle   = isOpen ? bn.cat.color : `rgba(${hexRgb(bn.cat.color)},0.15)`;
+        ctx.strokeStyle = bn.cat.color;
+        ctx.lineWidth   = 2;
+        ctx.shadowColor = bn.cat.color;
+        ctx.shadowBlur  = isOpen ? 28 : 14;
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        /* Label */
+        ctx.save();
+        ctx.font         = `700 10px 'Orbitron', sans-serif`;
+        ctx.fillStyle    = bn.cat.color;
+        ctx.shadowColor  = bn.cat.color;
+        ctx.shadowBlur   = isOpen ? 14 : 6;
+        ctx.textAlign    = bn.labelAnchor;
+        ctx.textBaseline = "middle";
+        ctx.fillText(bn.cat.label, bn.x + bn.ldx, bn.y + bn.ldy);
+        ctx.restore();
+      });
+
+      s.rafId = requestAnimationFrame(draw);
+    }
+
+    state.current.rafId = requestAnimationFrame(draw);
+
+    /* ── EVENTS ── */
+    function branchHit(mx: number, my: number) {
+      const sx = CW / canvas!.getBoundingClientRect().width;
+      const sy = CH / canvas!.getBoundingClientRect().height;
+      for (let i = 0; i < bnodes.length; i++) {
+        if (Math.hypot((mx) * sx - bnodes[i].x, (my) * sy - bnodes[i].y) < 24) return i;
+      }
+      return -1;
+    }
+
+    const onMove = (e: MouseEvent) => {
+      const r   = canvas!.getBoundingClientRect();
+      const hit = branchHit(e.clientX - r.left, e.clientY - r.top);
+      state.current.hoveredBranch = hit;
+      canvas!.style.cursor = hit >= 0 ? "pointer" : "default";
+    };
+
+    const onClick = (e: MouseEvent) => {
+      const r   = canvas!.getBoundingClientRect();
+      const hit = branchHit(e.clientX - r.left, e.clientY - r.top);
+      if (hit < 0) return;
+      onBranchClick(hit);
+    };
+
+    const onLeave = () => { state.current.hoveredBranch = -1; };
+
+    canvas.addEventListener("mousemove",  onMove);
+    canvas.addEventListener("click",      onClick);
+    canvas.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      cancelAnimationFrame(state.current.rafId);
+      canvas.removeEventListener("mousemove",  onMove);
+      canvas.removeEventListener("click",      onClick);
+      canvas.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} style={{ display: "block" }} />;
 }
 
 /* ─────────────────────────────────────────
    MAIN SECTION
 ───────────────────────────────────────── */
 export default function Skills() {
-  const [activeId, setActiveId] = useState("pm");
-  const active = MODULES.find(m => m.id === activeId)!;
+  const [openIdx, setOpenIdx] = useState(-1);
+
+  const handleBranchClick = (i: number) => {
+    setOpenIdx(prev => prev === i ? -1 : i);
+  };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@200;300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@200;300;400;600&display=swap');
 
         @property --sk-ang { syntax:'<angle>'; initial-value:0deg; inherits:false; }
         @keyframes sk_spin  { to { --sk-ang: 360deg; } }
         @keyframes sk_blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-        @keyframes sk_scan  {
-          0%{top:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100vh;opacity:0}
-        }
 
-        .sk-os-border {
-          position:absolute; inset:0; border-radius:20px; padding:1.5px;
-          background: conic-gradient(from var(--sk-ang), #00f7ff, #7c3aed, #ec4899, #facc15, #00f7ff);
+        .sk-shell-border {
+          position: absolute; inset: 0; border-radius: 18px; padding: 1.5px;
+          background: conic-gradient(from var(--sk-ang),#00f7ff,#7c3aed,#ec4899,#facc15,#00f7ff);
           animation: sk_spin 5s linear infinite;
           -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
           -webkit-mask-composite: xor; mask-composite: exclude;
           pointer-events: none;
-          box-shadow: 0 0 40px rgba(0,247,255,0.2);
         }
 
-        .sk-tabbar {
-          display:flex; align-items:stretch;
-          border-bottom: 1px solid rgba(0,247,255,0.08);
-          overflow-x: auto; scrollbar-width: none;
-        }
-        .sk-tabbar::-webkit-scrollbar { display:none; }
-
-        .sk-hex-bg {
-          position:fixed; inset:0; pointer-events:none; z-index:0;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z' fill='none' stroke='rgba(0,247,255,0.04)' stroke-width='1'/%3E%3Cpath d='M28 64 L56 80 L56 100' fill='none' stroke='rgba(0,247,255,0.04)' stroke-width='1'/%3E%3Cpath d='M0 80 L28 64 L0 100' fill='none' stroke='rgba(0,247,255,0.04)' stroke-width='1'/%3E%3C/svg%3E");
-          background-size: 56px 100px;
-          opacity: 0.55;
+        @media (max-width: 700px) {
+          .sk-split { flex-direction: column !important; }
+          .sk-tree-side { flex: none !important; width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(0,247,255,0.07) !important; }
+          .sk-tree-side canvas { width: 100% !important; }
         }
       `}</style>
 
-      {/* Hex grid */}
-      <div className="sk-hex-bg" />
+      <section id="skills" style={{ padding: "100px 24px 80px" }}>
 
-      <section id="skills" style={{ padding: "100px 24px 80px", position: "relative", zIndex: 1 }}>
-
-        {/* ── HEADER ── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -413,18 +479,18 @@ export default function Skills() {
             fontSize: 9, letterSpacing: 4,
             color: "rgba(0,247,255,0.5)", marginBottom: 12,
           }}>
-            // NEURAL · OS · v2.5 · SKILL MATRIX
+            // NEURAL · SKILL · TREE · v2.5
           </div>
           <h2 style={{
             fontFamily: "'Orbitron', sans-serif",
             fontSize: "clamp(22px,4vw,36px)",
             fontWeight: 900, letterSpacing: 3,
             background: "linear-gradient(135deg,#22d3ee,#6366f1,#a855f7)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
             filter: "drop-shadow(0 0 20px rgba(0,247,255,0.3))",
-            marginBottom: 10,
           }}>
-            CAPABILITY STACK
+            CAPABILITY TREE
           </h2>
           <div style={{
             width: 80, height: 1,
@@ -433,55 +499,45 @@ export default function Skills() {
           }} />
         </motion.div>
 
-        {/* ── OS SHELL ── */}
+        {/* Shell */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
           style={{
-            maxWidth: 960, margin: "0 auto",
+            maxWidth: 1020, margin: "0 auto",
             position: "relative",
-            borderRadius: 20,
-            background: "rgba(2,6,23,0.95)",
+            borderRadius: 18,
+            background: "rgba(2,6,23,0.96)",
             backdropFilter: "blur(24px)",
             overflow: "hidden",
           }}
         >
-          {/* Spinning conic border */}
-          <div className="sk-os-border" />
+          <div className="sk-shell-border" />
 
-          {/* ── TITLE BAR ── */}
+          {/* Title bar */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12,
-            padding: "12px 20px",
-            background: "rgba(0,247,255,0.03)",
-            borderBottom: "1px solid rgba(0,247,255,0.08)",
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "10px 18px",
+            borderBottom: "1px solid rgba(0,247,255,0.07)",
+            background: "rgba(0,247,255,0.02)",
           }}>
-            {/* Traffic lights */}
-            <div style={{ display: "flex", gap: 6 }}>
-              {[
-                { bg: "#ff5f57", shadow: "#ff5f57" },
-                { bg: "#febc2e", shadow: "#febc2e" },
-                { bg: "#28c840", shadow: "#28c840" },
-              ].map((d, i) => (
+            <div style={{ display: "flex", gap: 5 }}>
+              {(["#ff5f57","#febc2e","#28c840"] as const).map((c, i) => (
                 <div key={i} style={{
                   width: 10, height: 10, borderRadius: "50%",
-                  background: d.bg, boxShadow: `0 0 6px ${d.shadow}`,
+                  background: c, boxShadow: `0 0 5px ${c}`,
                 }} />
               ))}
             </div>
-
-            {/* Title */}
             <div style={{
               flex: 1, textAlign: "center",
               fontFamily: "'Share Tech Mono', monospace",
-              fontSize: 10, color: "rgba(0,247,255,0.4)", letterSpacing: 2,
+              fontSize: 9, color: "rgba(0,247,255,0.35)", letterSpacing: 2,
             }}>
-              NEURAL-OS · VISHAL.PM · SKILL-MATRIX.SYS
+              NEURAL-OS · VISHAL.PM · SKILL-TREE.SYS
             </div>
-
-            {/* Status */}
             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
               <div style={{
                 width: 5, height: 5, borderRadius: "50%",
@@ -490,32 +546,58 @@ export default function Skills() {
               }} />
               <span style={{
                 fontFamily: "'Share Tech Mono', monospace",
-                fontSize: 8, color: "rgba(34,197,94,0.6)", letterSpacing: 1.5,
+                fontSize: 8, color: "rgba(34,197,94,0.55)", letterSpacing: 1.5,
               }}>
-                ALL MODULES LOADED
+                5 MODULES · 44 SKILLS
               </span>
             </div>
           </div>
 
-          {/* ── TAB BAR ── */}
-          <div className="sk-tabbar">
-            {MODULES.map(mod => (
-              <Tab
-                key={mod.id}
-                mod={mod}
-                active={activeId === mod.id}
-                onClick={() => setActiveId(mod.id)}
-              />
-            ))}
+          {/* Split layout */}
+          <div
+            className="sk-split"
+            style={{ display: "flex", alignItems: "stretch", minHeight: 520 }}
+          >
+            {/* LEFT — canvas tree */}
+            <div
+              className="sk-tree-side"
+              style={{
+                flex: "0 0 480px",
+                borderRight: "1px solid rgba(0,247,255,0.07)",
+              }}
+            >
+              <SkillTree openIdx={openIdx} onBranchClick={handleBranchClick} />
+            </div>
+
+            {/* RIGHT — skill panel */}
+            <div style={{
+              flex: 1,
+              padding: "28px 24px",
+              display: "flex",
+              flexDirection: "column",
+              minWidth: 0,
+            }}>
+              <SkillPanel openIdx={openIdx} />
+            </div>
           </div>
 
-          {/* ── PANEL ── */}
-          <AnimatePresence mode="wait">
-            <Panel key={activeId} mod={active} />
-          </AnimatePresence>
+          {/* Footer */}
+          <div style={{
+            padding: "10px 20px",
+            borderTop: "1px solid rgba(0,247,255,0.06)",
+            background: "rgba(0,247,255,0.02)",
+            textAlign: "center",
+          }}>
+            <span style={{
+              fontFamily: "'Share Tech Mono', monospace",
+              fontSize: 8, letterSpacing: 2,
+              color: "rgba(0,247,255,0.3)",
+            }}>
+              CLICK A BRANCH NODE TO EXPAND · CLICK AGAIN TO COLLAPSE
+            </span>
+          </div>
 
         </motion.div>
-
       </section>
     </>
   );
