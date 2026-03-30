@@ -5,6 +5,8 @@ import Skills from "./components/Skills"
 import FAQ from "./components/FAQ";
 import Navbar from "./components/Navbar";
 import CursorGlow from "./components/CursorGlow";
+import Beacon from "./components/Beacon";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -17,6 +19,8 @@ export default function Home() {
       <Timeline />
       <Skills />
       <FAQ />
+      <Beacon />
+      <Footer />
       </div>
     </main>
   );
