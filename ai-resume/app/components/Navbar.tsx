@@ -14,7 +14,7 @@ const NAV_LINKS = [
 ];
 
 const AI_TAGS = [
-  "GPT-4o", "Claude 3.5", "LangChain", "RAG", "RLHF",
+  "GPT-4o", "Claude 4.6", "LangChain", "RAG", "RLHF",
   "Embeddings", "Fine-tuning", "AI Agents", "MCP", "MLOps",
   "Roadmaps", "OKRs", "A/B Tests", "Inference",
 ];
