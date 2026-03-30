@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import CursorGlow from "./components/CursorGlow";
 import Beacon from "./components/Beacon";
 import Footer from "./components/Footer";
+import Projects from "./components/Projects";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Metrics />
       <Timeline />
       <Skills />
+      <Projects />
       <FAQ />
       <Beacon />
       <Footer />
