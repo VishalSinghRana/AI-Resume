@@ -14,7 +14,7 @@ const BRAND_COLORS = [
 
 const TRAIL_COUNT  = 18;   // ghost trail dots
 const SPARK_LIFE   = 40;   // frames a spark lives
-const RING_LAG     = 0.50; // spring follow speed (lower = more lag)
+const RING_LAG     = 0.10; // spring follow speed (lower = more lag)
 const AURA_RADIUS  = 220;  // large glow radius
 const RING_RADIUS  = 22;   // orbiting ring radius
 const DOT_RADIUS   = 4;    // sharp centre dot

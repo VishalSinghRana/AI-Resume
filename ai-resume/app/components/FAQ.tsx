@@ -19,7 +19,7 @@ const FAQS: FAQItem[] = [
     color: "#00f7ff",
     rgb: "0,247,255",
     q: "You've been at the same company for 3+ years. Why should we believe you can operate in a different environment?",
-    a: "Fair challenge. But Goa Electronics isn't a comfortable legacy org — I parachuted into a 1M-user voter platform with zero PM process, no adoption playbook, and election deadlines that don't move. I built the roadmap, the PRD culture, the enablement framework, and the cross-functional rhythm from scratch, while simultaneously navigating senior government stakeholders (CEO Goa, EROs, BLOs) who had zero tolerance for ambiguity. That's the same muscle any fast-moving company needs. New domain, same discipline.",
+    a: "Fair challenge. But this wasn't a comfortable legacy setup — I stepped into a 1M+ user voter platform with no PM processes, no adoption playbook, and fixed election deadlines. I built the product roadmap, defined user journeys and prioritization frameworks, and led 70+ enablement sessions to drive adoption, while navigating senior government stakeholders (CEO Goa, DEOs, EROs, BLOs) with zero tolerance for ambiguity. That's the same execution muscle any fast-moving company needs — new domain, same discipline.",
     chips: ["Zero-to-one Ownership", "Stakeholder Navigation", "Ambiguity Tolerance"],
   },
   {
@@ -33,7 +33,7 @@ const FAQS: FAQItem[] = [
     color: "#ec4899",
     rgb: "236,72,153",
     q: "How do you handle product decisions when stakeholders have completely conflicting demands?",
-    a: "I've lived this. EROs wanted compliance-first features, users wanted friction-free flows, and engineering had capacity constraints — all at once, with an election date on the calendar. My approach: anchor every tradeoff to a shared north star metric, make the cost of each option explicit, and document the decision with a clear rationale. I don't let alignment be a vibe — I make it a structured conversation. Sometimes the answer is 'we do X now and Y next sprint'; sometimes it's 'we don't do Y at all, and here's why.' Either way, stakeholders leave the room knowing what's happening and why.",
+    a: "I've lived this. EROs wanted compliance-first features, users wanted friction-free flows, and engineering had capacity constraints — all at once, with an election date on the calendar. My approach: anchor every tradeoff to a shared north star metric, make the cost of each option explicit, and document the decision with a clear rationale. I don't let alignment be a vibe — I make it a structured conversation. Sometimes the answer is 'we do X now and Y afterwards'; sometimes it's 'we don't do Y at all, and here's why.' Either way, stakeholders leave the room knowing what's happening and why.",
     chips: ["Conflict Resolution", "Tradeoff Frameworks", "Stakeholder Alignment", "Decision Docs"],
   },
   {
@@ -47,15 +47,15 @@ const FAQS: FAQItem[] = [
     color: "#38bdf8",
     rgb: "56,189,248",
     q: "What's your biggest failure as a PM and what did you actually learn from it?",
-    a: "Early in my PM role I shipped a feature that technically met the acceptance criteria but completely missed the user. I'd defined the 'what' from stakeholder requirements without enough field validation — the election officials we built for didn't use it the way we assumed. Adoption was near zero for two weeks. I went to the field, sat with actual BLOs, watched them work, and realised the flow was three steps longer than their mental model. We shipped a revised version in the next sprint and adoption recovered. The lesson: acceptance criteria are a floor, not a ceiling. User behaviour is the only real acceptance test.",
+    a: "Early in my PM role I shipped a feature that technically met the acceptance criteria but completely missed the user. I'd defined the 'what' from stakeholder requirements without enough field validation — the election officials we built for didn't use it the way we assumed. Adoption was near zero for two weeks. I went to the field, sat with actual BLOs, watched them work, and realised the flow was three steps longer than their mental model. We shipped a revised version in the next release and adoption recovered. The lesson: acceptance criteria are a floor, not a ceiling. User behaviour is the only real acceptance test.",
     chips: ["Field Research", "User Empathy", "Rapid Iteration", "Honest Post-Mortems"],
   },
   {
     color: "#22c55e",
     rgb: "34,197,94",
     q: "What kind of role and company are you looking for next?",
-    a: "I want to work on AI-native products where the intelligence layer is the product, not a bolt-on. Ideally a team that's post-PMF but still scrappy enough that a PM's decisions visibly move the needle — not a 12-layer approval process. I'm drawn to problems in govtech, civic infrastructure, or enterprise AI where the user base is non-obvious and the stakes are real. I thrive when I'm the connective tissue between messy real-world constraints and structured product execution. If your team is serious about shipping AI that actually gets used by real people, that's where I do my best work.",
-    chips: ["AI-Native Products", "Govtech / Civic Tech", "Post-PMF Stage", "High Ownership"],
+    a: "I want to work on AI-native products where the intelligence layer is the product, not a bolt-on. Ideally, a team that’s post-PMF but still scrappy enough that a PM’s decisions visibly move the needle — not buried under layers of approvals. I’m especially drawn to enterprise and platform products where adoption, usability, and real-world execution matter as much as the tech itself. Having worked on systems serving 1M+ users and driven adoption and usability improvements, I thrive at the intersection of messy real-world constraints and structured product execution. If your team is serious about building AI that actually gets used at scale, that’s where I do my best work.",
+    chips: ["AI-Native Products", "Saas/Paas", "Post-PMF Stage", "High Ownership"],
   },
 ];
 
