@@ -13,7 +13,7 @@ const RELEASES = [
   { label: "ANALYTICS LAYER",  pct: 55 },
 ];
 
-const ORG_ROLES = ["PM", "ENG", "ENG", "QA", "OPS"];
+const ORG_ROLES = ["PM", "OPS", "ENG", "QA", "DEO"];
 
 const REPORT_TAGS = [
   "REAL-TIME ANALYTICS",
@@ -228,7 +228,7 @@ function UsersCard({ triggered }: { triggered: boolean }) {
       </div>
 
       <CardDesc>
-        End-to-end ownership of Goa's voter management platform — scaled to 1M+ citizens with 99% uptime across live election cycles.
+        End-to-end ownership of Goa's voter management platform — scaled to 1M+ citizens with 99% uptime across different voter related system and operations.
       </CardDesc>
     </CardShell>
   );
@@ -278,7 +278,7 @@ function AdoptionCard({ triggered }: { triggered: boolean }) {
       </div>
 
       <CardDesc>
-        Built adoption strategy from zero — trained election officials, ran enablement workshops, drove district-wide rollout.
+        Spearheaded zero-to-one adoption strategy, training election officials through targeted enablement workshops.
       </CardDesc>
     </CardShell>
   );
@@ -332,12 +332,12 @@ function UptimeCard({ triggered }: { triggered: boolean }) {
           fontFamily: "'Share Tech Mono', monospace",
           fontSize: 8, color: "rgba(34,197,94,0.6)", letterSpacing: 1.5,
         }}>
-          MAINTAINED DURING LIVE ELECTION PERIODS
+          MAINTAINED DURING CRITICAL SYSTEM OPERATIONS
         </div>
       </div>
 
       <CardDesc>
-        Zero critical failures across election cycles — sprint coordination, risk escalation, real-time monitoring.
+        Ensured zero critical failures across election operations through strong coordination, proactive risk escalation, and real-time monitoring.
       </CardDesc>
     </CardShell>
   );
@@ -451,8 +451,7 @@ function FeaturesCard({ triggered }: { triggered: boolean }) {
       </div>
 
       <CardDesc>
-        PRDs, user journeys, acceptance criteria — end-to-end ownership across 20+ releases under election-cycle pressure.
-      </CardDesc>
+Drove product execution across 20+ releases by defining user journeys and acceptance criteria in high-stakes election environments.      </CardDesc>
     </CardShell>
   );
 }
@@ -509,8 +508,7 @@ function TeamCard({ triggered }: { triggered: boolean }) {
       </div>
 
       <CardDesc>
-        Sprint coordination, risk escalation, delivery accountability — high-trust team that shipped under pressure.
-      </CardDesc>
+        Managed stakeholder communication, risk escalation, and delivery accountability—enabling a high-trust team to ship under pressure.      </CardDesc>
     </CardShell>
   );
 }
@@ -554,7 +552,7 @@ function ReportsCard({ triggered }: { triggered: boolean }) {
             fontFamily: "'Exo 2', sans-serif",
             fontSize: 13, color: "rgba(203,213,225,0.75)", lineHeight: 1.6,
           }}>
-            Real-time analytics infrastructure for election officials and senior stakeholders — custom reports, live dashboards, and decision-support tools built across the full SDLC as a full-stack engineer.
+            Built real-time analytics infrastructure across PM and Full-stack roles—delivering custom reports, live dashboards, and decision-support tools for officials and senior stakeholders.
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 12 }}>
             {REPORT_TAGS.map((tag, i) => (
