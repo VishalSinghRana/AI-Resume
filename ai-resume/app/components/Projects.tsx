@@ -22,19 +22,6 @@ const PROJECTS = [
     tech: ["Next.js", "TypeScript", "Framer Motion", "Canvas API", "Tailwind CSS", "Vercel"],
     liveUrl: "https://ai-resume-vishal.vercel.app",
     githubUrl: "https://github.com/VishalSinghRana/AI-Resume",
-    mockupLines: [
-      { w: "55%", h: 12, color: "rgba(0,247,255,0.35)", mb: 12 },
-      { w: "85%", h: 8,  color: "rgba(0,247,255,0.1)",  mb: 8  },
-      { w: "65%", h: 8,  color: "rgba(0,247,255,0.08)", mb: 8  },
-      { w: "75%", h: 8,  color: "rgba(0,247,255,0.1)",  mb: 12 },
-    ],
-    mockupCards: [
-      "rgba(0,247,255,0.25)",
-      "rgba(124,58,237,0.25)",
-      "rgba(236,72,153,0.25)",
-      "rgba(250,204,21,0.25)",
-    ],
-    mockupUrl: "vishalsinghrana.vercel.app",
   },
   {
     id: "02",
@@ -83,67 +70,6 @@ function HudCorners({ color }: { color: string }) {
 }
 
 /* ─────────────────────────────────────────
-   BROWSER MOCKUP (featured card only)
-───────────────────────────────────────── */
-function BrowserMockup({ project }: { project: typeof PROJECTS[0] }) {
-  return (
-    <div style={{
-      borderRadius: 10, overflow: "hidden",
-      border: `1px solid rgba(${project.rgb},0.2)`,
-      background: "rgba(2,6,23,0.85)",
-      display: "flex", flexDirection: "column",
-      flex: 1,
-    }}>
-      {/* Browser bar */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 6,
-        padding: "8px 12px",
-        background: `rgba(${project.rgb},0.04)`,
-        borderBottom: `1px solid rgba(${project.rgb},0.1)`,
-      }}>
-        {["#ff5f57", "#febc2e", "#28c840"].map((c, i) => (
-          <div key={i} style={{
-            width: 8, height: 8, borderRadius: "50%",
-            background: c, boxShadow: `0 0 4px ${c}`,
-          }} />
-        ))}
-        <div style={{
-          marginLeft: 8,
-          fontFamily: "'Share Tech Mono', monospace",
-          fontSize: 8, color: `rgba(${project.rgb},0.4)`, letterSpacing: 1,
-        }}>
-          {project.mockupUrl}
-        </div>
-      </div>
-
-      {/* Mockup body */}
-      <div style={{ padding: 14, flex: 1 }}>
-        {project.mockupLines?.map((line, i) => (
-          <div key={i} style={{
-            height: line.h, borderRadius: 4,
-            background: line.color,
-            width: line.w,
-            marginBottom: line.mb,
-          }} />
-        ))}
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: 6, marginTop: 4,
-        }}>
-          {project.mockupCards?.map((c, i) => (
-            <div key={i} style={{
-              height: 40, borderRadius: 6,
-              background: `rgba(${project.rgb},0.06)`,
-              border: `1px solid ${c}`,
-            }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────
    FEATURED PROJECT CARD
 ───────────────────────────────────────── */
 function FeaturedCard({ project, index }: { project: typeof PROJECTS[0]; index: number }) {
@@ -170,7 +96,7 @@ function FeaturedCard({ project, index }: { project: typeof PROJECTS[0]; index: 
         backdropFilter: "blur(20px)",
         borderRadius: 14,
         padding: "28px 26px",
-        display: "flex", gap: 32, flexWrap: "wrap",
+        display: "flex", flexDirection: "column",
         position: "relative", overflow: "hidden",
       }}>
         {/* Scanline */}
@@ -181,9 +107,6 @@ function FeaturedCard({ project, index }: { project: typeof PROJECTS[0]; index: 
           pointerEvents: "none",
         }} />
         <HudCorners color={project.accent} />
-
-        {/* LEFT */}
-        <div style={{ flex: 1, minWidth: 240 }}>
           <div style={{
             fontFamily: "'Share Tech Mono', monospace",
             fontSize: 7.5, letterSpacing: 2.5,
@@ -200,6 +123,7 @@ function FeaturedCard({ project, index }: { project: typeof PROJECTS[0]; index: 
             border: `1px solid ${project.accent}`,
             background: `rgba(${project.rgb},0.06)`,
             marginBottom: 14, position: "relative", zIndex: 1,
+            width: "fit-content",
           }}>
             <div style={{
               width: 5, height: 5, borderRadius: "50%",
@@ -272,16 +196,6 @@ function FeaturedCard({ project, index }: { project: typeof PROJECTS[0]; index: 
             <LinkBtn href={project.liveUrl} primary accent={project.accent} rgb={project.rgb} label="↗ LIVE SITE" />
             <LinkBtn href={project.githubUrl} primary={false} accent={project.accent} rgb={project.rgb} label="⌥ GITHUB" />
           </div>
-        </div>
-
-        {/* RIGHT — browser mockup */}
-        <div style={{
-          flex: 1, minWidth: 240,
-          display: "flex", flexDirection: "column",
-          position: "relative", zIndex: 1,
-        }}>
-          <BrowserMockup project={project} />
-        </div>
       </div>
     </motion.div>
   );
@@ -316,8 +230,6 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
         backdropFilter: "blur(20px)",
         borderRadius: 14,
         padding: "24px 22px 20px",
-        display: "flex", flexDirection: "column",
-        height: "100%",
         position: "relative", overflow: "hidden",
       }}>
         <div style={{
@@ -388,7 +300,7 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[0]; index: n
           fontFamily: "'Exo 2', sans-serif",
           fontSize: 12.5, fontWeight: 300,
           color: "rgba(203,213,225,0.7)", lineHeight: 1.65,
-          marginBottom: 16, flex: 1,
+          marginBottom: 8,
           position: "relative", zIndex: 1,
         }}>
           {project.description}
