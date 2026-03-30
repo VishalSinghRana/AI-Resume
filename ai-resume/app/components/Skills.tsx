@@ -12,9 +12,11 @@ const CATS = [
     color: "#00f7ff",
     rgb: "0,247,255",
     skills: [
-      "Roadmapping", "PRD Writing", "Prioritization", "User Stories",
-      "Backlog Refinement", "Sprint Planning", "Risk Management",
-      "Stakeholder Mgmt", "Training & Adoption", "Go-To-Market",
+      "Product Lifecycle Mgmt", "Requirement Analysis", 
+      "Roadmapping", "Feature Prioritization", "User Stories", 
+      "Backlog Refinement", "Market Research", "Cross-Functional Mindset", 
+      "Risk Management", "Stakeholder Mgmt", "Customer Feedback", 
+      "Training & Adoption", 
     ],
   },
   {
@@ -31,7 +33,7 @@ const CATS = [
     color: "#ec4899",
     rgb: "236,72,153",
     skills: [
-      "Figma", "FigJam", "User Journey Mapping", "IA Design",
+      "Figma", "FigJam", "User Journey Mapping",
       "Wireframing", "Task Flow Design", "Usability Analysis", "Eraser.io",
     ],
   },
