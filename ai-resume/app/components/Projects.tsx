@@ -49,10 +49,10 @@ const PROJECTS = [
     id: "03",
     featured: false,
     status: "CASE STUDY · PRODUCT",
-    statusColor: "#f97316",
+    statusColor: "#f91616",
     name: "ZOMATO MOOD",
     tagline: "AI-POWERED FOOD DISCOVERY · DECISION FATIGUE",
-    accent: "#f97316",
+    accent: "#f91616",
     accent2: "#ef4444",
     rgb: "249,115,22",
     description:
