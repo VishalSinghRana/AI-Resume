@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { label: "IMPACT",     href: "#metrics",  tag: "KPI",   code: "02" },
   { label: "EXPERIENCE", href: "#timeline", tag: "LOG",   code: "03" },
   { label: "SKILLS",     href: "#skills",   tag: "SYS",   code: "04" },
-  { label: "PROJECTS",   href: "#projects", tag: "BUILD",   code: "05" },
+  { label: "PROJECTS",   href: "#projects", tag: "BUILD", code: "05" },
   { label: "FAQ",        href: "#faq",      tag: "QUERY", code: "06" },
 ];
 

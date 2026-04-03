@@ -45,6 +45,47 @@ const PROJECTS = [
       "8 event types tracked",
     ],
   },
+  {
+    id: "03",
+    featured: false,
+    status: "CASE STUDY · PRODUCT",
+    statusColor: "#f97316",
+    name: "ZOMATO MOOD",
+    tagline: "AI-POWERED FOOD DISCOVERY · DECISION FATIGUE",
+    accent: "#f97316",
+    accent2: "#ef4444",
+    rgb: "249,115,22",
+    description:
+      "A product case study defining Zomato Mood — an AI-powered, intent-first discovery experience designed to reduce decision fatigue and increase session-to-order conversion. Covers end-to-end PM thinking: problem framing, three user personas, north star metric definition, feature prioritisation, go-to-market rollout plan, and risk analysis.",
+    tech: ["Product Strategy", "User Research", "AI / ML", "A/B Testing", "Go-to-Market", "Metrics & KPIs"],
+    liveUrl: "https://www.notion.so/PRODUCT-CASE-STUDY-337a1528eced80e782f8caa1cdbc6eb5",
+    githubUrl: "https://www.notion.so/PRODUCT-CASE-STUDY-337a1528eced80e782f8caa1cdbc6eb5",
+    highlights: [
+      "North star: Session-to-order conversion rate +7–10%",
+      "Time-to-order: 9 min → 5 min target",
+      "Mood feature adoption: 25% within 3 months",
+      "Session abandonment reduction: 10–15%",
+    ],
+  },
+  {
+    id: "04",
+    featured: false,
+    status: "COMING SOON",
+    statusColor: "#64748b",
+    name: "???",
+    tagline: "NEXT PROJECT · IN PROGRESS",
+    accent: "#64748b",
+    accent2: "#475569",
+    rgb: "100,116,139",
+    description:
+      "Something new is being built. Stay tuned.",
+    tech: [],
+    liveUrl: "#",
+    githubUrl: "#",
+    highlights: [
+      "Currently in development",
+    ],
+  },
 ];
 
 /* ─────────────────────────────────────────
